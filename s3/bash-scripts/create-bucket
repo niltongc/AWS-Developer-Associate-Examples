@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "testing bash scripting"
+echo "== creating s3 bucket"
 
 if [ -z "$1" ]; then
   echo "Arg for bucket name is empty"
