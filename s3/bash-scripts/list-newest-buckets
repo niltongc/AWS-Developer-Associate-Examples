@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "== list newest s3 bucket"
+
+aws s3api list-buckets \
+  --query "reverse(sort_by(Buckets, &CreationDate))[:5].Name" \
+  --output json
+
+echo "..."
+
+aws s3api list-buckets | jq -r '.Buckets | sort_by(.CreationDate) | reverse | .[:5] | .[].Name'
