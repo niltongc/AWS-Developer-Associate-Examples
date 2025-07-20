@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+echo "sync"
+
+set -e
+
+if [ -z "$1" ]; then
+  echo "Arg for bucket name is empty"
+  exit 1
+fi
+
+if [ -z "$2" ]; then
+  echo "Arg for bucket name is empty"
+  exit 1
+fi
+
+BUCKET_NAME=$1
