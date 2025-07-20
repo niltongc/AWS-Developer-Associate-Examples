@@ -19,7 +19,7 @@ FILENAME_PREFIX=$2
 
 OUTPUT_DIR="/tmp/s3-bash-scripts"
 
-rm -r $OUTPUT_DIR
+rm -fr $OUTPUT_DIR
 
 mkdir -p $OUTPUT_DIR
 
