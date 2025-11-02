@@ -1,14 +1,17 @@
 use clap::Parser;
 
-use aws_sdk_s3::{Client, Error};
+use aws_sdk_s3::{Client};
 use aws_config::BehaviorVersion;
 
 mod services;
 
 use services::create_files::create_files;
+use services::create_bucket::create_bucket;
 
 //https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/dotnetv3/S3/S3_Basics/S3Bucket.cs#L12
 //https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/rustv1/examples/s3/src/lib.rs
+
+// Usage cargo run -- --bucket-name-arg my-bucket-name
 
 #[derive(Parser)]
 struct Args {
@@ -18,7 +21,11 @@ struct Args {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let _ = create_files();
+
+    if let Err(e) = create_files() {
+        eprintln!("⚠️ Erro to create files: {}", e);
+    }
+
     let args = Args::parse();
     let bucket_name = &args.bucket_name_arg;
 
@@ -36,27 +43,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub async fn create_bucket(
-    client: &aws_sdk_s3::Client,
-    bucket_name: &str,
-) -> Result<Option<aws_sdk_s3::operation::create_bucket::CreateBucketOutput>, Error> {
-    
-    let create = client
-        .create_bucket()
-        .bucket(bucket_name)
-        .send()
-        .await;
 
-    // BucketAlreadyExists and BucketAlreadyOwnedByYou are not problems for this task.
-    create.map(Some).or_else(|err| {
-        if err
-            .as_service_error()
-            .map(|se| se.is_bucket_already_exists() || se.is_bucket_already_owned_by_you())
-            == Some(true)
-        {
-            Ok(None)
-        } else {
-            Err(Error::from(err))
-        }
-    })
-}

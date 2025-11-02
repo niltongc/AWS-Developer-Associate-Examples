@@ -4,9 +4,12 @@ extern crate guid_create;
 use guid_create::GUID;
 
 pub fn create_files() -> std::io::Result<()> {
+
+    std::fs::create_dir_all("src/my_files")?;
+
     for i in 1..3 {
 
-        let filename = format!("mydoc{}", i);
+        let filename = format!("src/my_files/mydoc{}", i);
         println!("i is: {}", filename);
 
         let guid = GUID::rand();
