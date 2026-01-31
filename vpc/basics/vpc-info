@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# reference:
+# https://docs.aws.amazon.com/cli/latest/reference/ec2/#cli-aws-ec2
+
+
+# describe vpcs
+aws ec2 describe-vpcs --query "Vpcs[].{VpcId:VpcId,Tags:Tags}" --output table
+
+aws ec2 describe-vpcs \
+  --filters Name=vpc-id,Values=vpc-03b086b8ed3f496f2
+
+# describe igws
+aws ec2 describe-internet-gateways --query "InternetGateways[].{Tags:Tags}"
+
+aws ec2 describe-internet-gateways \
+  --filters Name=attachment.vpc-id,Values=vpc-03b086b8ed3f496f2
+
+# describe subnet
+aws ec2 describe-subnets \
+  --filters Name=vpc-id,Values=vpc-03b086b8ed3f496f2
+
+# describe route tables
+aws ec2 describe-route-tables
+
+aws ec2 describe-route-tables \
+  --filters Name=vpc-id,Values=vpc-03b086b8ed3f496f2

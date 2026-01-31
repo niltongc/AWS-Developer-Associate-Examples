@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# reference:
+# https://docs.aws.amazon.com/cli/latest/reference/ec2/#cli-aws-ec2
+
+
+# Create vpc
+aws ec2 create-vpc \
+    --cidr-block 10.0.0.0/16 \
+    --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=NewVPC2026}]"
+
+# create an IGW
+aws ec2 create-internet-gateway \
+    --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=Newigw2026}]"
+
+# attach an IGW to vpc
+aws ec2 attach-internet-gateway \
+    --internet-gateway-id igw-0ec5a875ce8236bab \
+    --vpc-id vpc-03b086b8ed3f496f2
+
+# create a new subnet
+aws ec2 create-subnet \
+    --vpc-id vpc-03b086b8ed3f496f2 \
+    --cidr-block 10.0.0.0/24 \
+    --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=my-subnet-2026}]"
+
+# modify subnet to public
+aws ec2 modify-subnet-attribute \
+  --subnet-id subnet-0095bfaa871aacee0 \
+  --map-public-ip-on-launch
+
+# associate RT to IGW
+aws ec2 create-route \
+    --route-table-id rtb-0463da750b0ab0451 \
+    --destination-cidr-block 0.0.0.0/0 \
+    --gateway-id igw-0ec5a875ce8236bab
+
