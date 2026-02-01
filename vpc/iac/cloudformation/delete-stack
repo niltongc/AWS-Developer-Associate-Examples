@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-echo "== delete stack s3 bucket via CFN"
+echo "== delete stack vpc via CFN"
 
-STACK_NAME="cfn-s3-simple2"
+STACK_NAME="cfn-vpc-simple"
 
 aws cloudformation delete-stack \
 --stack-name $STACK_NAME
